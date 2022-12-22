@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            float: right;
+            vertical-align: center;
+        }
+
+        input {
+            border-radius: 4px;
+            height: 38px;
+        }
+
+        a {
+            margin: 5px;
+        }
+
+        th,td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>List Student</h1>
+    <a class="btn btn-primary" th:href="@{/students/create}">Create new</a>
+    <a class="btn btn-primary" th:href="@{/classes}">List Class</a>
+    <form th:action="@{/students}" method="get">
+        <label>
+            <input type="text" name="search" th:value="${search}">
+        </label>
+        <button class="btn btn-primary">Search</button>
+    </form>
+    <table class="table table-striped">
+        <tr>
+            <th>STT</th>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>CLASS</th>
+            <th>IMAGE</th>
+            <th colspan="2">Action</th>
+        </tr>
+        <tr th:each="p,s : ${students}">
+            <td th:text="${s.count}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.dob}"></td>
+            <td th:text="${p.classes.name}"></td>
+            <td><img style="width: 100px; height: 100px" th:src="@{'/image/' + ${p.image}}" alt="Lỗi"></td>
+            <td><a class="btn btn-warning" th:href="@{/students/update/{id}(id=${p.getId()})}">Update</a></td>
+            <td><a class="btn btn-danger" th:href="@{/students/delete/{id}(id=${p.getId()})}"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa Sinh viên này?')">Delete</a></td>
+        </tr>
+    </table>
+    <div>
+        <a th:href="@{/students(page=${students.number - 1},search=${search})}" th:if="${students.hasPrevious()}">Previous</a>
+        <span th:text="${students.number + 1}"></span>/<span th:text="${students.totalPages}"></span>
+        <a th:href="@{/students(page=${students.number - 1},search=${search})}" th:if="${students.hasNext()}">Next</a>
+    </div>
+</div>
+</body>
+</html>
